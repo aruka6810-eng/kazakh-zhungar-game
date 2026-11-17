@@ -1,0 +1,44 @@
+<!doctype html><html lang="kk"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Тарихи миссия: Қазақ-жоңғар шайқастары</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:22px;font-family:Arial,sans-serif;background:linear-gradient(135deg,#e6f3ff,#f4eaff,#fff2d6);color:#26334a}
+main{max-width:850px;margin:auto;background:white;border-radius:24px;overflow:hidden;box-shadow:0 14px 40px #30456b25}
+header{background:linear-gradient(110deg,#53318c,#8a5dc5);color:white;padding:25px 30px}h1{margin:0 0 8px;font-size:clamp(24px,4vw,36px)}header p{margin:0}
+.wrap{padding:25px}.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.tag{background:#eee5fa;color:#58348e;padding:9px 14px;border-radius:30px;font-weight:bold}
+.bar{height:11px;background:#eee;border-radius:30px;margin:16px 0 22px;overflow:hidden}.bar div{height:100%;background:linear-gradient(90deg,#7046a8,#42a6d6);width:0}
+.card{background:#fafaff;border:2px solid #e7e2f1;border-radius:18px;padding:22px}.stage{color:#7046a8;font-weight:bold}.q{font-size:21px;font-weight:bold;line-height:1.4;margin:14px 0}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:11px}button{font:inherit;cursor:pointer;border-radius:12px;padding:13px;border:2px solid #d9e1ed;background:white;color:#26334a;text-align:left;font-weight:bold}
+button:hover{border-color:#8b63c0;background:#f7f1ff}.answer.ok{background:#e7f7eb;border-color:#49a96e}.answer.no{background:#fff0ed;border-color:#dc7a6f}
+.action{background:#6941a7;color:white;border:0;padding:13px 22px;text-align:center}.action:disabled{opacity:.4;cursor:not-allowed}
+.feedback{min-height:35px;margin:14px 0;font-weight:bold}.good{color:#23834e}.bad{color:#bb5147}
+.footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.small{font-size:13px;color:#68758a}
+.result{text-align:center;padding:28px}.big{font-size:64px}
+@media(max-width:600px){.answers{grid-template-columns:1fr}body{padding:8px}.wrap{padding:14px}}
+</style>
+<main><header><h1>🏹 Тарихи миссия: Қазақ-жоңғар шайқастары</h1><p>7-сынып • Қазақстан тарихы • Біліміңді сына!</p></header>
+<div class="wrap"><div class="row"><span class="tag" id="level">1-бөлім</span><span class="tag" id="score">Ұпай: 0</span></div><div class="bar"><div id="fill"></div></div>
+<section id="game"><div class="card"><div class="stage" id="stage"></div><div class="q" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div><div class="footer"><span class="small" id="hint">Дұрыс жауапты таңда.</span><button class="action" id="next" disabled>Келесі →</button></div></div></section>
+<section id="result" class="result" hidden></section>
+<p class="small">Ескерту: Аңырақай және Бұланты шайқастарының мерзімі жөнінде деректерде әртүрлі нұсқалар кездеседі. Сабақта қолданылатын оқулықтағы датаны басшылыққа ал.</p></div></main>
+<script>
+const qs=[
+["Демография және көші-қон","Демографиялық өзгеріс дегеніміз не?",["Халық саны мен құрамындағы өзгерістер","Тек әскер санының өзгеруі","Сауда жолдарының бағыты","Жер бедерінің өзгеруі"],0,"Демография халық саны мен құрамын зерттейді."],
+["Демография және көші-қон","Жоңғар шапқыншылығы кезінде халықтың басқа аймақтарға амалсыз қоныс аударуы қалай аталады?",["Отырықшылық","Мәжбүрлі көші-қон","Жәрмеңке","Құрылтай"],1,"Бұл — соғыс қаупінен туған мәжбүрлі көші-қон."],
+["Тарихи дерек","«Елім-ай» әні қандай тарихи құбылысты халық жадында сақтауға көмектеседі?",["Тек сауда қатынасын","Босқыншылық пен ел басына түскен ауыртпалықты","Қалалардың салынуын","Егіншілік әдістерін"],1,"Ән халықтың қайғы-қасіреті мен тарихи жадын жеткізеді."],
+["Тарихи дерек","Ауыз әдебиеті туындысын тарихи дерек ретінде қолданғанда не істеу керек?",["Ондағы барлық мәліметті сөзсіз дәл деп қабылдау","Тек әуеніне назар аудару","Басқа тарихи деректермен салыстырып тексеру","Оқиғаның уақытын елемеу"],2,"Көркем туындыны өзге деректермен салыстыра бағалау қажет."],
+["Ішкі саяси жағдай","1726 жылғы Ордабасы жиынының негізгі мақсаты қандай болды?",["Сауда салығын белгілеу","Үш жүздің күшін жоңғарларға қарсы біріктіру","Жаңа астана салу","Жоңғарлармен одақ құру"],1,"Ордабасы жиыны қазақ жасақтарын біріктіруге бағытталды."],
+["Ішкі саяси жағдай","Қазақ хандығының қорғанысын әлсіреткен ішкі саяси мәселе қандай еді?",["Билеушілер арасындағы алауыздық пен бытыраңқылық","Мал санының көбеюі","Қолөнердің дамуы","Сауда керуендерінің көбеюі"],0,"Ішкі алауыздық ортақ қорғанысты ұйымдастыруды қиындатты."],
+["Шаруашылық","Жоңғар шапқыншылығы мал шаруашылығына қалай әсер етті?",["Мал басы көбейді","Мал қырылып, жайылымнан айырылу орын алды","Жаңа егістік ашылды","Сауда дамыды"],1,"Мал-мүліктен айырылу мен жайылымның бұзылуы шаруашылықты әлсіретті."],
+["Шаруашылық","Шапқыншылық сауда мен қолөнерге қандай зардап әкелуі мүмкін?",["Сауда жолдары мен байланыстардың үзілуі","Барлық қалалардың көбеюі","Керуендердің қауіпсіз жүруі","Қолөнердің бірден өркендеуі"],0,"Соғыс жағдайы сауда жолдары мен өндіріс орталықтарына зиян келтірді."],
+["Хронология","«Ақтабан шұбырынды» оқиғасының басталуымен байланысты жылды таңда.",["1643","1723","1822","1916"],1,"1723 жыл жоңғарлардың жаппай шапқыншылығы басталған кезең ретінде оқытылады."],
+["Хронология","Бұланты және Аңырақай шайқастарының мерзімін қалай дұрыс көрсетуге болады?",["Екеуі де 1500 жылы","Бұланты 1726/1728, Аңырақай 1729/1730 деп әртүрлі деректе беріледі","Екеуі де 1917 жылы","Нақты жылдары бірдей әрі даусыз"],1,"Шайқастардың нақты даталары жөнінде деректерде айырмашылық бар."]
+];
+let i=0,score=0,locked=false;
+const $=x=>document.getElementById(x);
+function render(){locked=false;let q=qs[i];$("level").textContent=`${q[0]} • ${i+1}/${qs.length}`;$("score").textContent=`Ұпай: ${score}`;$("fill").style.width=(i/qs.length*100)+"%";$("stage").textContent=q[0];$("question").textContent=q[1];$("feedback").textContent="";$("feedback").className="feedback";$("answers").innerHTML="";$("next").disabled=true;
+q[2].forEach((a,n)=>{let b=document.createElement("button");b.className="answer";b.textContent=a;b.onclick=()=>pick(n,b);$("answers").appendChild(b)});}
+function pick(n,b){if(locked)return;locked=true;let q=qs[i],ok=n===q[3];document.querySelectorAll(".answer").forEach((x,j)=>{x.disabled=true;if(j===q[3])x.classList.add("ok");else if(j===n)x.classList.add("no")});if(ok){score++;$("feedback").textContent="⭐ Дұрыс! "+q[4];$("feedback").classList.add("good")}else{$("feedback").textContent="Дұрыс жауап: "+q[2][q[3]]+". "+q[4];$("feedback").classList.add("bad")}$("score").textContent=`Ұпай: ${score}`;$("next").disabled=false;}
+$("next").onclick=()=>{i++;if(i<qs.length)render();else finish()};
+function finish(){$("game").hidden=true;$("result").hidden=false;$("fill").style.width="100%";let msg=score>=8?"Тамаша! Сен тарихи зерттеушісің!":score>=5?"Жақсы нәтиже! Білімінді тағы бекіт.":"Қайталап оқып, ойынды қайта баста!";$("result").innerHTML=`<div class="big">${score>=8?"🏆":score>=5?"🌟":"📚"}</div><h2>Миссия аяқталды!</h2><p style="font-size:25px"><b>${score}/${qs.length} ұпай</b></p><p>${msg}</p><button class="action" onclick="location.reload()">Қайта ойнау</button>`}
+render();
+</script></html>
